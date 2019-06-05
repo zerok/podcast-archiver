@@ -14,10 +14,12 @@ run-tests:
   stage: "test"
   image: "golang:latest"
   cache:
-    key: "gomodules"
+    key: "gopath"
     paths:
-      - "/go/pkg/mod"
+      - ".gopath"
   script:
+    - "mkdir -p .gopath"
+    - "export GOPATH=$CI_PROJECT_DIR/.gopath"
     - "go test -v ./..."
 
 build-image:
