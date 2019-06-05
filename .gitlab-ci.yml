@@ -25,5 +25,6 @@ run-tests:
 build-image:
   stage: "build"
   script:
+    - "docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com"
     - "docker build --cache-from $CI_REGISTRY_IMAGE:latest -t $CI_REGISTRY_IMAGE:latest ."
     - "docker push $CI_REGISTRY_IMAGE:latest"
