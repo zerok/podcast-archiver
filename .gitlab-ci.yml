@@ -1,8 +1,14 @@
 variables:
   GO111MODULE: "on"
 
+image: docker:stable
+
+services:
+  - docker:dind
+
 stages:
   - "test"
+  - "build"
 
 run-tests:
   stage: "test"
@@ -13,3 +19,9 @@ run-tests:
       - "/go/pkg/mod"
   script:
     - "go test -v ./..."
+
+build-image:
+  stage: "build"
+  script:
+    - "docker build --cache-from $CI_REGISTRY_IMAGE:latest -t $CI_REGISTRY_IMAGE:latest ."
+    - "docker push $CI_REGISTRY_IMAGE:latest"
