@@ -20,16 +20,13 @@ import (
 	"strings"
 	"time"
 
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/credentials"
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/s3"
-	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/pflag"
+	"github.com/zerok/podcast-archiver/pkg/sinks"
 )
 
 func main() {
+	ctx := context.Background()
 	log := logrus.New()
 	var configPath string
 	var verbose bool
@@ -48,15 +45,16 @@ func main() {
 		log.WithError(err).Fatalf("Failed to load configuration from '%s'", configPath)
 	}
 
-	sess, err := session.NewSession(aws.NewConfig().
-		WithCredentials(credentials.NewStaticCredentials(cfg.Sink.AccessKeyID, cfg.Sink.AccessKeySecret, "")).
-		WithRegion(cfg.Sink.Region))
-	if err != nil {
-		log.WithError(err).Fatalf("Failed to open AWS session")
+	var sink sinks.Sink
+	if cfg.Sink.GoogleProjectID != "" {
+		sink, err = sinks.NewGCSSink(ctx, cfg.Sink)
+	} else {
+		sink, err = sinks.NewS3Sink(ctx, cfg.Sink)
 	}
 
-	uploader := s3manager.NewUploader(sess)
-	svc := s3.New(sess)
+	if err != nil {
+		log.WithError(err).Fatal("Failed to setup sink.")
+	}
 
 	for _, feed := range cfg.Feeds {
 		log.Infof("Downloading items from %s", feed.URL)
@@ -66,19 +64,16 @@ func main() {
 		}
 		knownFiles := make(map[string]struct{})
 		bucketPrefix := fmt.Sprintf("%s/", feed.Folder)
-		ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
+		timedctx, cancel := context.WithTimeout(ctx, time.Second*5)
 		// Let's retrieve a list of items we already have in the bucket so that
 		// we don't upload something twice.
-		bucketList, err := svc.ListObjectsWithContext(ctx, &s3.ListObjectsInput{
-			Bucket: &cfg.Sink.Bucket,
-			Prefix: &bucketPrefix,
-		})
+		objects, err := sink.ListObjects(timedctx, bucketPrefix)
 		if err != nil {
 			cancel()
 			log.WithError(err).Fatalf("Failed to list objects in %s", cfg.Sink.Bucket)
 		}
-		for _, key := range bucketList.Contents {
-			knownFiles[strings.TrimPrefix(*key.Key, bucketPrefix)] = struct{}{}
+		for _, obj := range objects {
+			knownFiles[strings.TrimPrefix(obj.Name, bucketPrefix)] = struct{}{}
 		}
 		for _, item := range f.Items {
 			for _, enc := range item.Enclosures {
@@ -99,14 +94,7 @@ func main() {
 				}
 				key := fmt.Sprintf("%s/%s", feed.Folder, filename)
 
-				input := s3manager.UploadInput{
-					Bucket: &cfg.Sink.Bucket,
-					Body:   resp.Body,
-					Key:    &key,
-				}
-
-				_, err = uploader.Upload(&input)
-				if err != nil {
+				if err := sink.CreateObject(ctx, key, resp.Body); err != nil {
 					resp.Body.Close()
 					log.WithError(err).Fatalf("Failed to upload %s", key)
 				}

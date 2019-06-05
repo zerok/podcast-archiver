@@ -17,6 +17,7 @@ import (
 	"io/ioutil"
 	"os"
 
+	"github.com/zerok/podcast-archiver/pkg/sinks"
 	yaml "gopkg.in/yaml.v2"
 )
 
@@ -25,15 +26,8 @@ type feedConfiguration struct {
 	Folder string `yaml:"folder"`
 }
 
-type sinkConfiguration struct {
-	Bucket          string `yaml:"bucket"`
-	AccessKeyID     string `yaml:"access_key_id"`
-	AccessKeySecret string `yaml:"access_key_secret"`
-	Region          string `yaml:"region"`
-}
-
 type configuration struct {
-	Sink  sinkConfiguration   `yaml:"sink"`
+	Sink  sinks.Configuration `yaml:"sink"`
 	Feeds []feedConfiguration `yaml:"feeds"`
 }
 
