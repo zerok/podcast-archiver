@@ -6,11 +6,10 @@ stages:
 
 run-tests:
   stage: "test"
-  image: "golang:1.12-alpine"
+  image: "golang:latest"
   cache:
     key: "gomodules"
     paths:
       - "/go/pkg/mod"
   script:
-    - "apk add --no-cache git ca-certificates"
-    - "go test ./..."
+    - "go test -v ./..."
