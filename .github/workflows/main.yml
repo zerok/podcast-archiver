@@ -20,5 +20,5 @@ jobs:
       run: |
         set -e
         echo -n "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u zerok --password-stdin
-      docker build -t docker.pkg.github.com/zerok/podcast-archiver/podcast-archiver:${{ github.run_number }}
-      docker push docker.pkg.github.com/zerok/podcast-archiver/podcast-archiver:${{ github.run_number }}
+        docker build -t docker.pkg.github.com/zerok/podcast-archiver/podcast-archiver:${{ github.run_number }}
+        docker push docker.pkg.github.com/zerok/podcast-archiver/podcast-archiver:${{ github.run_number }}
