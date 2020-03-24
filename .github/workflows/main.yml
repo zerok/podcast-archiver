@@ -12,3 +12,13 @@ jobs:
         go-version: "1.14.1"
     - name: Run tests
       run: go test ./...
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Build docker image
+      run: |
+        set -e
+        echo -n "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u zerok --password-stdin
+      docker build -t docker.pkg.github.com/zerok/podcast-archiver/podcast-archiver:${{ github.run_number }}
+      docker push docker.pkg.github.com/zerok/podcast-archiver/podcast-archiver:${{ github.run_number }}
