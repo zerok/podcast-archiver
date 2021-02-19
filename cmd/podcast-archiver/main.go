@@ -48,6 +48,8 @@ func main() {
 	var sink sinks.Sink
 	if cfg.Sink.GoogleProjectID != "" {
 		sink, err = sinks.NewGCSSink(ctx, cfg.Sink)
+	} else if cfg.Sink.DropboxOAuthAccessToken != "" {
+		sink, err = sinks.NewDropboxSink(ctx, cfg.Sink)
 	} else {
 		sink, err = sinks.NewS3Sink(ctx, cfg.Sink)
 	}

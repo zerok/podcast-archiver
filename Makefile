@@ -13,4 +13,7 @@ bin/podcast-archiver-linux: $(shell find . -name '*.go')
 clean:
 	rm -rf bin
 
-.PHONY: all clean linux
+test:
+	go test ./... -v
+
+.PHONY: all clean linux test

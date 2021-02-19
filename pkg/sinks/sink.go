@@ -19,11 +19,12 @@ import (
 )
 
 type Configuration struct {
-	GoogleProjectID string `yaml:"google_project_id"`
-	Bucket          string `yaml:"bucket"`
-	AccessKeyID     string `yaml:"access_key_id"`
-	AccessKeySecret string `yaml:"access_key_secret"`
-	Region          string `yaml:"region"`
+	GoogleProjectID         string `yaml:"google_project_id"`
+	Bucket                  string `yaml:"bucket"`
+	AccessKeyID             string `yaml:"access_key_id"`
+	AccessKeySecret         string `yaml:"access_key_secret"`
+	Region                  string `yaml:"region"`
+	DropboxOAuthAccessToken string `yaml:"dropbox_oauth_access_token"`
 }
 
 type BucketObject struct {
