@@ -79,6 +79,9 @@ func main() {
 		}
 		for _, item := range f.Items {
 			for _, enc := range item.Enclosures {
+				if enc.URL == "" {
+					continue
+				}
 				filename := getFilename(enc.URL)
 				if _, found := knownFiles[filename]; found {
 					log.Debugf("%s already uploaded", enc.URL)
