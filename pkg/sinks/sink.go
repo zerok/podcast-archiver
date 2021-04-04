@@ -21,6 +21,7 @@ import (
 type Configuration struct {
 	GoogleProjectID         string `yaml:"google_project_id"`
 	Bucket                  string `yaml:"bucket"`
+	FileSystemFolder        string `yaml:"filesystem_folder"`
 	AccessKeyID             string `yaml:"access_key_id"`
 	AccessKeySecret         string `yaml:"access_key_secret"`
 	Region                  string `yaml:"region"`
