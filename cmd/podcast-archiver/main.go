@@ -53,6 +53,15 @@ func main() {
 		log.WithError(err).Fatal("Failed to create notification channel")
 	}
 
+	if n != nil {
+		if err := n.Login(ctx); err != nil {
+			log.WithError(err).Fatal("Failed to log into Matrix")
+		}
+		if err := n.JoinRoom(ctx); err != nil {
+			log.WithError(err).Fatal("Failed to join Matrix room")
+		}
+	}
+
 	var sink sinks.Sink
 	if cfg.Sink.GoogleProjectID != "" {
 		sink, err = sinks.NewGCSSink(ctx, cfg.Sink)
