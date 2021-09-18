@@ -22,6 +22,7 @@ import (
 
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/pflag"
+	"github.com/zerok/podcast-archiver/internal/notifications"
 	"github.com/zerok/podcast-archiver/pkg/sinks"
 )
 
@@ -43,6 +44,13 @@ func main() {
 	cfg, err := loadConfig(configPath)
 	if err != nil {
 		log.WithError(err).Fatalf("Failed to load configuration from '%s'", configPath)
+	}
+
+	var n *notifications.Notifications
+
+	n, err = notifications.NewFromEnv()
+	if err != nil {
+		log.WithError(err).Fatal("Failed to create notification channel")
 	}
 
 	var sink sinks.Sink
@@ -105,7 +113,14 @@ func main() {
 					resp.Body.Close()
 					log.WithError(err).Fatalf("Failed to upload %s", key)
 				}
-				resp.Body.Close()
+				if err := resp.Body.Close(); err != nil {
+					log.WithError(err).Fatalf("Failed close %s", key)
+				}
+				if n != nil {
+					if err := n.Send(ctx, fmt.Sprintf("%s archived", enc.URL)); err != nil {
+						log.WithError(err).Errorf("Failed to send notification for %s", key)
+					}
+				}
 			}
 		}
 		cancel()

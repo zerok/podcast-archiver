@@ -12,7 +12,6 @@ github.com/aws/aws-sdk-go v0.0.0-20171227232545-793c7bad9fd3/go.mod h1:ZRmQr0Faj
 github.com/client9/misspell v0.3.4/go.mod h1:qj6jICC3Q7zFZvVWo7KLAzC3yx5G7kyvSDkc90ppPyw=
 github.com/davecgh/go-spew v1.1.0 h1:ZDRjVQ15GmhC3fiQ8ni8+OwkZQO4DARzQgrnXU1Liz8=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
-github.com/dropbox/dropbox-sdk-go-unofficial v1.0.0 h1:aF0YLE7rHMeMMoXRdAOapFgFrNxvT+RUt/X4je6Ns9s=
 github.com/dropbox/dropbox-sdk-go-unofficial v5.6.0+incompatible h1:DtumzkLk2zZ2SeElEr+VNz+zV7l+BTe509cV4sKPXbM=
 github.com/dropbox/dropbox-sdk-go-unofficial v5.6.0+incompatible/go.mod h1:lr+LhMM3F6Y3lW1T9j2U5l7QeuWm87N9+PPXo3yH4qY=
 github.com/fsnotify/fsnotify v1.4.7 h1:IXs+QLmnXW2CcXuY+8Mzv/fWEsPGWxqefPtCP5CnV9I=
@@ -49,6 +48,8 @@ github.com/kr/pretty v0.1.0/go.mod h1:dAy3ld7l9f0ibDNOQOHHMYYIIbhfbHSm3C4ZsoJORN
 github.com/kr/pty v1.1.1/go.mod h1:pFQYn66WHrOpPYNljwOMqo10TkYh1fy3cYio2l3bCsQ=
 github.com/kr/text v0.1.0 h1:45sCR5RtlFHMR4UwH9sdQ5TC8v0qDQCHnXt+kaKSTVE=
 github.com/kr/text v0.1.0/go.mod h1:4Jbv+DJW3UT/LiOwJeYQe1efqtUx/iVham/4vfdArNI=
+github.com/matrix-org/gomatrix v0.0.0-20210324163249-be2af5ef2e16 h1:ZtO5uywdd5dLDCud4r0r55eP4j9FuUNpl60Gmntcop4=
+github.com/matrix-org/gomatrix v0.0.0-20210324163249-be2af5ef2e16/go.mod h1:/gBX06Kw0exX1HrwmoBibFA98yBk/jxKpGVeyQbff+s=
 github.com/mmcdole/gofeed v0.0.0-20171225195901-2e0b80655fb8 h1:9nowfkC7g0Ggy7RVrmnt6BRN3JZ7/B7mQDRf+jZchR0=
 github.com/mmcdole/gofeed v0.0.0-20171225195901-2e0b80655fb8/go.mod h1:/BF9JneEL2/flujm8XHoxUcghdTV6vvb3xx/vKyChFU=
 github.com/mmcdole/goxpp v0.0.0-20170720115402-77e4a51a73ed h1:I1StLV+Wab/bbfFbrNqwikOhIgMbhqUxVd/a5+NQ8QY=
