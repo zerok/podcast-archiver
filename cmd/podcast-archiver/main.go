@@ -16,6 +16,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"html"
 	"net/http"
 	"strings"
 	"time"
@@ -126,7 +127,7 @@ func main() {
 					log.WithError(err).Fatalf("Failed close %s", key)
 				}
 				if n != nil {
-					if err := n.Send(ctx, fmt.Sprintf("%s archived", enc.URL)); err != nil {
+					if err := n.Send(ctx, fmt.Sprintf("%s/%s (%s) archived", feed.Folder, filename, html.EscapeString(item.Title))); err != nil {
 						log.WithError(err).Errorf("Failed to send notification for %s", key)
 					}
 				}
