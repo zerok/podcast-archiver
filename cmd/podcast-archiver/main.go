@@ -24,7 +24,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/pflag"
 	"github.com/zerok/podcast-archiver/internal/notifications"
-	"github.com/zerok/podcast-archiver/pkg/sinks"
+	"github.com/zerok/podcast-archiver/internal/sinks"
 )
 
 func main() {

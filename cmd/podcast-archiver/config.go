@@ -17,7 +17,7 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/zerok/podcast-archiver/pkg/sinks"
+	"github.com/zerok/podcast-archiver/internal/sinks"
 	yaml "gopkg.in/yaml.v2"
 )
 
