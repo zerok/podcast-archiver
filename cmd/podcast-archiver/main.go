@@ -18,6 +18,7 @@ import (
 	"fmt"
 	"html"
 	"net/http"
+	"net/url"
 	"strings"
 	"time"
 
@@ -102,7 +103,11 @@ func main() {
 				if enc.URL == "" {
 					continue
 				}
-				filename := getFilename(enc.URL)
+				filename, err := getFilename(enc.URL)
+				if err != nil {
+					log.Warnf("%s could not be parsed", enc.URL)
+					continue
+				}
 				if _, found := knownFiles[filename]; found {
 					log.Debugf("%s already uploaded", enc.URL)
 					continue
@@ -137,7 +142,14 @@ func main() {
 	}
 }
 
-func getFilename(u string) string {
-	segments := strings.Split(u, "/")
-	return segments[len(segments)-1]
+func getFilename(u string) (string, error) {
+	parsed, err := url.Parse(u)
+	if err != nil {
+		return "", err
+	}
+	elems := strings.Split(parsed.Path, "/")
+	if len(elems) == 0 {
+		return "", fmt.Errorf("failed to split path")
+	}
+	return elems[len(elems)-1], nil
 }
