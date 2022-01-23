@@ -22,8 +22,9 @@ import (
 )
 
 type feedConfiguration struct {
-	URL    string `yaml:"url"`
-	Folder string `yaml:"folder"`
+	URL              string `yaml:"url"`
+	Folder           string `yaml:"folder"`
+	FileNameTemplate string `yaml:"filename_template"`
 }
 
 type configuration struct {

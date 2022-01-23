@@ -14,14 +14,18 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"fmt"
 	"html"
 	"net/http"
 	"net/url"
 	"strings"
+	"text/template"
 	"time"
 
+	"github.com/gosimple/slug"
+	"github.com/mmcdole/gofeed"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/pflag"
 	"github.com/zerok/podcast-archiver/internal/notifications"
@@ -80,6 +84,10 @@ func main() {
 	}
 
 	for _, feed := range cfg.Feeds {
+		fngen, err := newFileNameGenerator(&feed)
+		if err != nil {
+			log.WithError(err).Fatalf("Failed to generate filename generator: %s", err.Error())
+		}
 		log.Infof("Downloading items from %s", feed.URL)
 		f, err := loadFeed(feed.URL)
 		if err != nil {
@@ -103,7 +111,7 @@ func main() {
 				if enc.URL == "" {
 					continue
 				}
-				filename, err := getFilename(enc.URL)
+				filename, err := fngen.GenerateFileName(ctx, f, item, enc)
 				if err != nil {
 					log.Warnf("%s could not be parsed", enc.URL)
 					continue
@@ -142,7 +150,7 @@ func main() {
 	}
 }
 
-func getFilename(u string) (string, error) {
+func getFileNameFromURL(u string) (string, error) {
 	parsed, err := url.Parse(u)
 	if err != nil {
 		return "", err
@@ -152,4 +160,51 @@ func getFilename(u string) (string, error) {
 		return "", fmt.Errorf("failed to split path")
 	}
 	return elems[len(elems)-1], nil
+}
+
+type fileNameGenerator struct {
+	tpl *template.Template
+	cfg *feedConfiguration
+}
+
+func newFileNameGenerator(feed *feedConfiguration) (*fileNameGenerator, error) {
+	g := &fileNameGenerator{}
+	g.cfg = feed
+	if feed.FileNameTemplate != "" {
+		tpl, err := template.New("root").Funcs(map[string]interface{}{
+			"fileName": getFileNameFromURL,
+			"formatDate": func(v time.Time, fmt string) string {
+				return v.Format(fmt)
+			},
+			"slugify": func(v string) string {
+				return slug.Make(v)
+			},
+		}).Parse(feed.FileNameTemplate)
+		if err != nil {
+			return nil, err
+		}
+		g.tpl = tpl
+	}
+	return g, nil
+}
+
+func (g *fileNameGenerator) GenerateFileName(ctx context.Context, feed *gofeed.Feed, item *gofeed.Item, enc *gofeed.Enclosure) (string, error) {
+	if g.tpl == nil {
+		return getFileNameFromURL(enc.URL)
+	}
+	out := bytes.Buffer{}
+	if err := g.tpl.ExecuteTemplate(&out, "root", fileNameGeneratorContent{
+		Feed:      feed,
+		Item:      item,
+		Enclosure: enc,
+	}); err != nil {
+		return "", err
+	}
+	return out.String(), nil
+}
+
+type fileNameGeneratorContent struct {
+	Feed      *gofeed.Feed
+	Item      *gofeed.Item
+	Enclosure *gofeed.Enclosure
 }

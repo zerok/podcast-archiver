@@ -28,6 +28,23 @@ feeds:
   url: "https://changelog.com/master/feed"
 ```
 
+The feed also contains an optional field with the name `filename_template`.
+With this field you set a template through which the final filename will
+generated. This template is then parsed using the
+[text/template](https://pkg.go.dev/text/template) package of Go.
+
+Within the template you can use the following properties:
+
+- `.Feed`: [gofeed.Feed](https://pkg.go.dev/github.com/mmcdole/gofeed?utm_source=godoc#Feed)
+- `.Item`: [gofeed.Item](https://pkg.go.dev/github.com/mmcdole/gofeed?utm_source=godoc#Item)
+- `.Enclusure`: [gofeed.Enclosure](https://pkg.go.dev/github.com/mmcdole/gofeed?utm_source=godoc#Enclosure)
+
+Additionally, the following functions are available:
+
+- `fileName(v string)`
+- `slugify(v string)`
+- `formatDate(ts time.Time, format string)`
+
 The following fields are available for the sink:
 
 - `google_project_id`
