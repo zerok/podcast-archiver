@@ -2,7 +2,8 @@ FROM golang:1.21-alpine AS builder
 RUN mkdir -p /go/src/github.com/zerok && apk add --no-cache git
 WORKDIR /go/src/github.com/zerok/podcast-archiver
 COPY . .
-RUN cd /go/src/github.com/zerok/podcast-archiver/cmd/podcast-archiver && go build
+RUN --mount=type=cache,target=/go/pkg/mod \
+    cd /go/src/github.com/zerok/podcast-archiver/cmd/podcast-archiver && go build
 
 FROM alpine:3.19
 RUN apk add --no-cache ca-certificates
