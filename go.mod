@@ -5,7 +5,6 @@ go 1.17
 require (
 	cloud.google.com/go v0.39.0
 	github.com/aws/aws-sdk-go v1.49.15
-	github.com/dropbox/dropbox-sdk-go-unofficial v5.6.0+incompatible
 	github.com/gosimple/slug v1.12.0
 	github.com/matrix-org/gomatrix v0.0.0-20210324163249-be2af5ef2e16
 	github.com/mmcdole/gofeed v1.2.1
