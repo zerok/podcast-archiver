@@ -10,7 +10,7 @@ require (
 	github.com/matrix-org/gomatrix v0.0.0-20210324163249-be2af5ef2e16
 	github.com/mmcdole/gofeed v1.2.1
 	github.com/sirupsen/logrus v1.9.3
-	github.com/spf13/pflag v0.0.0-20171106142849-4c012f6dcd95
+	github.com/spf13/pflag v1.0.5
 	github.com/stretchr/testify v1.8.4
 	google.golang.org/api v0.30.0
 	gopkg.in/yaml.v2 v2.2.8
