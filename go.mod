@@ -13,7 +13,7 @@ require (
 	github.com/spf13/pflag v0.0.0-20171106142849-4c012f6dcd95
 	github.com/stretchr/testify v1.8.4
 	google.golang.org/api v0.30.0
-	gopkg.in/yaml.v2 v2.2.8
+	gopkg.in/yaml.v2 v2.4.0
 )
 
 require (
