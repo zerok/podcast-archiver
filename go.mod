@@ -6,7 +6,7 @@ require (
 	cloud.google.com/go/storage v1.10.0
 	github.com/aws/aws-sdk-go v1.49.15
 	github.com/dropbox/dropbox-sdk-go-unofficial/v6 v6.0.5
-	github.com/gosimple/slug v1.12.0
+	github.com/gosimple/slug v1.13.1
 	github.com/matrix-org/gomatrix v0.0.0-20210324163249-be2af5ef2e16
 	github.com/mmcdole/gofeed v1.2.1
 	github.com/sirupsen/logrus v1.9.3
