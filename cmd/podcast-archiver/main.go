@@ -28,17 +28,33 @@ import (
 	"github.com/mmcdole/gofeed"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/pflag"
+	"github.com/zerok/podcast-archiver/internal/monitoring"
 	"github.com/zerok/podcast-archiver/internal/notifications"
 	"github.com/zerok/podcast-archiver/internal/sinks"
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/metric"
 )
+
+var (
+	buildInfoMetric     metric.Int64ObservableGauge
+	itemsSeenMetric     metric.Int64Counter
+	itemsArchivedMetric metric.Int64Counter
+)
+
+var version string
+var commit string
 
 func main() {
 	ctx := context.Background()
 	log := logrus.New()
 	var configPath string
 	var verbose bool
+	var err error
+	var jobInstance string
 	pflag.StringVar(&configPath, "config", "-", "Path to a config file. (Default: stdin)")
 	pflag.BoolVar(&verbose, "verbose", false, "Verbose logging")
+	pflag.StringVar(&jobInstance, "instance", "", "Instance used for metric submission")
 	pflag.Parse()
 
 	if verbose {
@@ -46,6 +62,32 @@ func main() {
 	} else {
 		log.SetLevel(logrus.InfoLevel)
 	}
+
+	shutdownMetrics := monitoring.MustSetup(ctx, verbose, version)
+	defer shutdownMetrics()
+	meter := otel.Meter("podcast-archiver")
+
+	buildInfoMetric, err = meter.Int64ObservableGauge("build_info", metric.WithInt64Callback(func(ctx context.Context, observer metric.Int64Observer) error {
+		observer.Observe(1, metric.WithAttributes(
+			attribute.String("version", version),
+			attribute.String("commit", commit),
+			attribute.String("instance", jobInstance),
+		))
+		return nil
+	}))
+	if err != nil {
+		log.WithError(err).Fatalf("Failed to register metric: %s", "build_info")
+	}
+	itemsSeenMetric, err = meter.Int64Counter("podcastarchiver_items_seen")
+	if err != nil {
+		log.WithError(err).Fatalf("Failed to register metric: %s", "podcastarchiver_items_seen")
+	}
+	itemsArchivedMetric, err = meter.Int64Counter("podcastarchiver_items_archived")
+	if err != nil {
+		log.WithError(err).Fatalf("Failed to register metric: %s", "podcastarchiver_items_seen")
+	}
+	itemsSeenMetric.Add(ctx, 0)
+	itemsArchivedMetric.Add(ctx, 0)
 
 	cfg, err := loadConfig(configPath)
 	if err != nil {
@@ -116,6 +158,7 @@ func main() {
 					log.Warnf("%s could not be parsed", enc.URL)
 					continue
 				}
+				itemsSeenMetric.Add(ctx, 1)
 				if _, found := knownFiles[filename]; found {
 					log.Debugf("%s already uploaded", enc.URL)
 					continue
@@ -140,6 +183,7 @@ func main() {
 					log.WithError(err).Fatalf("Failed close %s", key)
 				}
 				if n != nil {
+					itemsArchivedMetric.Add(ctx, 1)
 					if err := n.Send(ctx, fmt.Sprintf("%s/%s (%s) archived", feed.Folder, filename, html.EscapeString(item.Title))); err != nil {
 						log.WithError(err).Errorf("Failed to send notification for %s", key)
 					}

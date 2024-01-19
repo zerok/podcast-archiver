@@ -36,6 +36,9 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
     - uses: docker/build-push-action@v5
       with:
+        build-args: |
+          commit=${{ github.sha }}
+          version=${{ github.ref_name }}
         context: .
         platforms: linux/amd64,linux/arm64
         push: ${{ github.ref == 'refs/heads/main' }}
