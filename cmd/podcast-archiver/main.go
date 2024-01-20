@@ -4,7 +4,7 @@
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//	http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,6 +20,7 @@ import (
 	"html"
 	"net/http"
 	"net/url"
+	"os"
 	"strings"
 	"text/template"
 	"time"
@@ -52,10 +53,20 @@ func main() {
 	var verbose bool
 	var err error
 	var jobInstance string
+	var showVersion bool
 	pflag.StringVar(&configPath, "config", "-", "Path to a config file. (Default: stdin)")
 	pflag.BoolVar(&verbose, "verbose", false, "Verbose logging")
 	pflag.StringVar(&jobInstance, "instance", "", "Instance used for metric submission")
+	pflag.BoolVar(&showVersion, "version", false, "Show version information")
 	pflag.Parse()
+
+	if version == "" {
+		version = "unversioned"
+	}
+	if showVersion {
+		fmt.Printf("Version: %s (commit: %s)\n", version, commit)
+		os.Exit(0)
+	}
 
 	if verbose {
 		log.SetLevel(logrus.DebugLevel)
