@@ -28,6 +28,7 @@ jobs:
           ghcr.io/zerok/podcast-archiver/podcast-archiver
         tags: |
           type=raw,value={{date 'YYYYMMDD'}}-{{sha}}
+          type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
     - if: "${{ github.ref == 'refs/heads/main' }}"
       uses: docker/login-action@v3
       with:
