@@ -6,7 +6,7 @@ toolchain go1.22.3
 
 require (
 	cloud.google.com/go/storage v1.43.0
-	github.com/aws/aws-sdk-go v1.55.3
+	github.com/aws/aws-sdk-go v1.55.5
 	github.com/dropbox/dropbox-sdk-go-unofficial/v6 v6.0.5
 	github.com/gosimple/slug v1.14.0
 	github.com/matrix-org/gomatrix v0.0.0-20210324163249-be2af5ef2e16
