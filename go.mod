@@ -5,7 +5,7 @@ go 1.22
 toolchain go1.22.3
 
 require (
-	cloud.google.com/go/storage v1.45.0
+	cloud.google.com/go/storage v1.47.0
 	github.com/aws/aws-sdk-go v1.55.5
 	github.com/dropbox/dropbox-sdk-go-unofficial/v6 v6.0.5
 	github.com/gosimple/slug v1.14.0
