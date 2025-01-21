@@ -1,7 +1,8 @@
 module github.com/zerok/podcast-archiver
 
-go 1.22
-toolchain go1.22.5
+go 1.22.0
+
+toolchain go1.23.5
 
 require (
 	cloud.google.com/go/storage v1.47.0
