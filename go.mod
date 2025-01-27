@@ -20,7 +20,7 @@ require (
 	go.opentelemetry.io/otel/metric v1.34.0
 	go.opentelemetry.io/otel/sdk v1.34.0
 	go.opentelemetry.io/otel/sdk/metric v1.34.0
-	google.golang.org/api v0.217.0
+	google.golang.org/api v0.218.0
 	gopkg.in/yaml.v3 v3.0.1
 )
 
