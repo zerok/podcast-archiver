@@ -5,7 +5,7 @@ go 1.22.0
 toolchain go1.23.5
 
 require (
-	cloud.google.com/go/storage v1.48.0
+	cloud.google.com/go/storage v1.50.0
 	github.com/aws/aws-sdk-go v1.55.6
 	github.com/dropbox/dropbox-sdk-go-unofficial/v6 v6.0.5
 	github.com/gosimple/slug v1.15.0
@@ -32,7 +32,7 @@ require (
 	cloud.google.com/go/compute/metadata v0.6.0 // indirect
 	cloud.google.com/go/iam v1.2.2 // indirect
 	cloud.google.com/go/monitoring v1.21.2 // indirect
-	github.com/GoogleCloudPlatform/opentelemetry-operations-go/detectors/gcp v1.24.2 // indirect
+	github.com/GoogleCloudPlatform/opentelemetry-operations-go/detectors/gcp v1.25.0 // indirect
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/metric v0.48.1 // indirect
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go/internal/resourcemapping v0.48.1 // indirect
 	github.com/PuerkitoBio/goquery v1.8.0 // indirect
