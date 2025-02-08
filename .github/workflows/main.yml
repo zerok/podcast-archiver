@@ -41,7 +41,7 @@ jobs:
           COMMIT=${{ github.sha }}
           VERSION=${{ github.ref_name }}
         context: .
-        platforms: linux/amd64,linux/arm64
+        platforms: linux/amd64${{ github.ref == 'refs/heads/main' && ',linux/arm64' || '' }}
         push: ${{ github.ref == 'refs/heads/main' }}
         tags: ${{ steps.meta.outputs.tags }}
 
