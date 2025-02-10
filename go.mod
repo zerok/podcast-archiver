@@ -1,6 +1,7 @@
 module github.com/zerok/podcast-archiver
 
-go 1.22.0
+go 1.22.7
+
 toolchain go1.23.5
 
 require (
