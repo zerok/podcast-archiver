@@ -8,7 +8,7 @@ RUN --mount=type=cache,target=/go/pkg/mod \
     cd /go/src/github.com/zerok/podcast-archiver/cmd/podcast-archiver && \
     go build -ldflags "-X main.version=$VERSION -X main.commit=$COMMIT"
 
-FROM alpine:3.21
+FROM alpine:3.22
 RUN apk add --no-cache ca-certificates
 COPY --from=builder /go/src/github.com/zerok/podcast-archiver/cmd/podcast-archiver/podcast-archiver /usr/local/bin
 ENTRYPOINT ["/usr/local/bin/podcast-archiver"]
