@@ -13,7 +13,7 @@ require (
 	github.com/mmcdole/gofeed v1.3.0
 	github.com/sirupsen/logrus v1.9.3
 	github.com/spf13/pflag v1.0.7
-	github.com/stretchr/testify v1.10.0
+	github.com/stretchr/testify v1.11.0
 	go.opentelemetry.io/otel v1.37.0
 	go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetrichttp v1.37.0
 	go.opentelemetry.io/otel/exporters/stdout/stdoutmetric v1.37.0
