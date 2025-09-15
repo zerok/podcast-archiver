@@ -1,6 +1,6 @@
 module github.com/zerok/podcast-archiver
 
-go 1.23.0
+go 1.24.0
 
 toolchain go1.24.1
 
@@ -20,7 +20,7 @@ require (
 	go.opentelemetry.io/otel/metric v1.38.0
 	go.opentelemetry.io/otel/sdk v1.38.0
 	go.opentelemetry.io/otel/sdk/metric v1.38.0
-	google.golang.org/api v0.248.0
+	google.golang.org/api v0.249.0
 	gopkg.in/yaml.v3 v3.0.1
 )
 
