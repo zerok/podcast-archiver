@@ -1,4 +1,4 @@
-FROM golang:1.25-alpine AS builder
+FROM golang:1.26-alpine AS builder
 ARG VERSION
 ARG COMMIT
 RUN mkdir -p /go/src/github.com/zerok && apk add --no-cache git
