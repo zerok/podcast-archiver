@@ -4,7 +4,7 @@
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//	http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,14 +14,18 @@
 package main
 
 import (
+	"net/http"
 	"os"
 	"strings"
 
 	"github.com/mmcdole/gofeed"
 )
 
-func loadFeed(u string) (*gofeed.Feed, error) {
+func loadFeed(u string, httpClient *http.Client) (*gofeed.Feed, error) {
 	parser := gofeed.NewParser()
+	if httpClient != nil {
+		parser.Client = httpClient
+	}
 	if strings.HasPrefix(u, ".") {
 		fp, err := os.Open(u)
 		if err != nil {
