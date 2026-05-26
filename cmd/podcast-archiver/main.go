@@ -26,6 +26,7 @@ import (
 	"time"
 
 	"github.com/gosimple/slug"
+	"github.com/hashicorp/go-retryablehttp"
 	"github.com/mmcdole/gofeed"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/pflag"
@@ -54,9 +55,13 @@ func main() {
 	var err error
 	var jobInstance string
 	var showVersion bool
+	var retryMax int
+	var retryWaitMax time.Duration
 	pflag.StringVar(&configPath, "config", "-", "Path to a config file. (Default: stdin)")
 	pflag.BoolVar(&verbose, "verbose", false, "Verbose logging")
 	pflag.StringVar(&jobInstance, "instance", "", "Instance used for metric submission")
+	pflag.DurationVar(&retryWaitMax, "retry-wait-max", time.Minute*1, "Maximum retry wait time")
+	pflag.IntVar(&retryMax, "retry-max", 5, "Maximum number of retries")
 	pflag.BoolVar(&showVersion, "version", false, "Show version information")
 	pflag.Parse()
 
@@ -137,12 +142,16 @@ func main() {
 	}
 
 	for _, feed := range cfg.Feeds {
+		rc := retryablehttp.NewClient()
+		rc.RetryWaitMax = retryWaitMax
+		rc.RetryMax = retryMax
+		httpClient := rc.StandardClient()
 		fngen, err := newFileNameGenerator(&feed)
 		if err != nil {
 			log.WithError(err).Fatalf("Failed to generate filename generator: %s", err.Error())
 		}
 		log.Infof("Downloading items from %s", feed.URL)
-		f, err := loadFeed(feed.URL)
+		f, err := loadFeed(feed.URL, httpClient)
 		if err != nil {
 			log.WithError(err).Fatalf("Failed to parse %s", feed.URL)
 		}
@@ -175,7 +184,7 @@ func main() {
 					continue
 				}
 				log.Infof("Archiving %s", enc.URL)
-				resp, err := http.Get(enc.URL)
+				resp, err := httpClient.Get(enc.URL)
 				if err != nil {
 					cancel()
 					log.WithError(err).Fatalf("Failed to download '%s'", enc.URL)
