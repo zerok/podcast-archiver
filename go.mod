@@ -3,7 +3,7 @@ module github.com/zerok/podcast-archiver
 go 1.25.8
 
 require (
-	cloud.google.com/go/storage v1.64.0
+	cloud.google.com/go/storage v1.65.0
 	github.com/aws/aws-sdk-go v1.55.8
 	github.com/dropbox/dropbox-sdk-go-unofficial/v6 v6.6.0
 	github.com/gosimple/slug v1.15.0
