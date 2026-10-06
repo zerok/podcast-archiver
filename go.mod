@@ -5,7 +5,7 @@ go 1.26.0
 require (
 	cloud.google.com/go/storage v1.69.0
 	github.com/aws/aws-sdk-go v1.55.8
-	github.com/dropbox/dropbox-sdk-go-unofficial/v6 v6.6.1
+	github.com/dropbox/dropbox-sdk-go-unofficial/v6 v6.6.2
 	github.com/gosimple/slug v1.15.0
 	github.com/hashicorp/go-retryablehttp v0.7.8
 	github.com/matrix-org/gomatrix v0.0.0-20210324163249-be2af5ef2e16
